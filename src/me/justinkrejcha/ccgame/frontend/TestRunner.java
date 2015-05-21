@@ -6,7 +6,8 @@ import java.text.DecimalFormat;
 
 public class TestRunner {
 	public static void main(String[] args) {
-		CoffeePlayer p = new CoffeePlayer("Test", false, 15000.0, Double.MAX_VALUE, 150.0, CoffeeGame.createDefaultBuildings());
+		CoffeePlayer p = new CoffeePlayer("Test", false, 15000.0,
+				Double.MAX_VALUE, 150.0, CoffeeGame.createDefaultBuildings());
 		CoffeeGame g = new CoffeeGame(p);
 		g.start();
 		while (true) {

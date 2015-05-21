@@ -8,10 +8,10 @@ import javax.swing.*;
 public class BuildingPurchaseListener implements ActionListener {
 	private CoffeePlayer p;
 	private Building b;
-	private JComponent component;
+	private JButton component;
 	
 	public BuildingPurchaseListener(CoffeePlayer p, Building b, 
-									JComponent component) {
+									JButton component) {
 		this.p = p;
 		this.b = b;
 		this.component = component;
@@ -20,5 +20,6 @@ public class BuildingPurchaseListener implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		p.buy(b);
 		component.setEnabled(p.canBuy(b));
+		component.setText("Buy 1 " + b.getName() + " (" + b.getPrice() + ")");
 	}
 }

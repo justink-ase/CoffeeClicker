@@ -75,6 +75,9 @@ public class Building {
 	*/
 	public long getPrice() {
 		// base cost * (1.15^amount - 1) / 0.15
+		if (amount == 0) {
+			return (long)basePrice;
+		}
 		return (long)((long)basePrice * (Math.pow(1.15, amount) - 1) / 0.15);
 	}
 	

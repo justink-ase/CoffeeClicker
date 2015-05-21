@@ -15,13 +15,12 @@ public class TextUpdaterRunnable implements Runnable {
 	/**
 	* Create a new CpS runnable
 	* @param game  The game to use
-	* @param delay The delay (usually 1000 / FPS)
 	*/
-	public TextUpdaterRunnable(CoffeeGame game, JLabel label, JLabel cpsLabel, long delay) {
+	public TextUpdaterRunnable(CoffeeGame game, JLabel label, JLabel cpsLabel) {
 		this.game = game;
 		this.label = label;
 		this.cpsLabel = cpsLabel;
-		this.delay = delay;
+		this.delay = 1000 / game.getFps();
 	}
 	
 	/**

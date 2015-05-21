@@ -7,11 +7,10 @@ public class AutoCoffeeRunnable implements Runnable {
 	/**
 	* Create a new CpS runnable
 	* @param game  The game to use
-	* @param delay The delay (usually 1000 / FPS)
 	*/
-	public AutoCoffeeRunnable(CoffeeGame game, long delay) {
+	public AutoCoffeeRunnable(CoffeeGame game) {
 		this.game = game;
-		this.delay = delay;
+		this.delay = 1000 / game.getFps();
 	}
 	
 	/**

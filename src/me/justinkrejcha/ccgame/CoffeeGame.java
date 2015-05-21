@@ -7,6 +7,7 @@ import me.justinkrejcha.game.*;
 
 public class CoffeeGame extends SinglePlayerGame {
 	private Thread autoClickerThread;
+	private int fps;
 
 	/**
 	* Constructor for a new game.
@@ -14,14 +15,23 @@ public class CoffeeGame extends SinglePlayerGame {
 	public CoffeeGame() {
 		this(new CoffeePlayer());
 	}
-	
+
 	public CoffeeGame(CoffeePlayer p) {
+		this(p, 30);
+	}
+	
+	public CoffeeGame(CoffeePlayer p, int fps) {
 		this.setPlayer(p);
-		this.autoClickerThread = new Thread(new AutoCoffeeRunnable(this, 33));
+		this.fps = fps;
+		this.autoClickerThread = new Thread(new AutoCoffeeRunnable(this));
 	}
 	
 	public CoffeePlayer getPlayer() {
 		return (CoffeePlayer) super.getPlayer();
+	}
+
+	public int getFps() {
+		return fps;
 	}
 	
 	public void start() {

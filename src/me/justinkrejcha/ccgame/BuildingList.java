@@ -56,6 +56,10 @@ public class BuildingList {
 		}
 		return bonus;
 	}
+
+	public Building[] getAllBuildings() {
+		return buildings.toArray(new Building[size()]);
+	}
 	
 	private void validateDifferentIds() {
 		List<Integer> ids = new ArrayList<Integer>();

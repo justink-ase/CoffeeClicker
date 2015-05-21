@@ -21,11 +21,13 @@ public class CoffeePlayer extends Player {
 	}
 	
 	public CoffeePlayer(String name) {
-		this(name, false, 0.0, 0.0, 0.0, CoffeeGame.createDefaultBuildings());
+		//TODO: Remove testing code
+		this(name, false, 1.0, 1.0, 1.0, CoffeeGame.createDefaultBuildings());
 	}
 	
 	public CoffeePlayer(String name, boolean cheated, double coffees, 
-						double totalCoffees, double perSecond, BuildingList buildings) {
+						double totalCoffees, double perSecond,
+						BuildingList buildings) {
 		this.name = name;
 		this.cheated = cheated;
 		this.coffees = coffees;
@@ -98,8 +100,9 @@ public class CoffeePlayer extends Player {
 	}
 	
 	private void doCheatCheck() {
-		cheated = Util.any(cheated, coffees > totalCoffees, perSecond > totalCoffees,
-					totalCoffees < 0, coffees < 0, perSecond < 0);
+		cheated = Util.any(cheated, coffees > totalCoffees,
+				perSecond > totalCoffees, totalCoffees < 0, coffees < 0,
+				perSecond < 0);
 	}
 	
 	public String toString() {
