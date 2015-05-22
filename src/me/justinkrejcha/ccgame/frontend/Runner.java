@@ -29,8 +29,8 @@ public class Runner {
 	}
 	
 	/**
-	* Sets the system look and feel.
-	* Taken from the tutorial to set the look and feel.
+	* Sets the system look and feel.<br>
+	* Taken from the tutorial to set the look and feel.<br>
 	* See: https://docs.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
 	*/
 	private static void setSystemLAF() {

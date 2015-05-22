@@ -1,6 +1,7 @@
 package me.justinkrejcha.ccgame.frontend.event;
 
 import me.justinkrejcha.ccgame.*;
+import me.justinkrejcha.Util;
 
 import java.awt.event.*;
 import javax.swing.*;
@@ -20,6 +21,7 @@ public class BuildingPurchaseListener implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		p.buy(b);
 		component.setEnabled(p.canBuy(b));
-		component.setText("Buy 1 " + b.getName() + " (" + b.getPrice() + ")");
+		component.setText(Util.format(CoffeeGame.BUTTON_TEXT, b.getName(), 
+					"" + b.getPrice()));
 	}
 }

@@ -44,7 +44,7 @@ public class Util {
 	*/
 	public static void validateNotNull(Object obj) {
 		if (obj == null) {
-			throw new NullPointerException("Validation of non-null object fail");
+			throw new NullPointerException("Expected non-null object but was null");
 		}
 	}
 	
@@ -74,5 +74,19 @@ public class Util {
 				}
 			}
 		}
+	}
+	
+	/**
+	* Formats a string and returns it.
+	* @param format Format to use
+	* @param args   Arguments
+	* @return Formatted string
+	*/
+	public static String format(String format, String... args) {
+		String newStr = format;
+		for (int i = 0; i < args.length; i++) {
+			newStr = newStr.replace("{" + i + "}", args[i]);
+		}
+		return newStr;
 	}
 }

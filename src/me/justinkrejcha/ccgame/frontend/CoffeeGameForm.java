@@ -14,20 +14,25 @@ import java.util.ArrayList;
 public class CoffeeGameForm {
 	private CoffeeGame game;
 	private Thread textUpdater;
+	private Thread buildingUpdater;
 
 	private static String LOADING_TEXT = "Loading...";
-	private static String IMAGE_PATH = "/data/coffee.png";
+	private static String IMAGE_PATH = "H:/AP Comp Sci/Final/Coffee Clicker Project/src/data/coffee.png";
+	//private static String IMAGE_PATH = "/data/coffee.png";
 
 	private JFrame window;
 	private JPanel northPanel;
 	private JPanel eastPanel;
 	private JPanel centerPanel;
+	private JPanel leftEastPanel;
+	
 	private JLabel nameLabel;
 	private JLabel countLabel;
 	private JLabel cpsLabel;
 	private JLabel coffeeImgLabel;
 
 	private java.util.List<JButton> purchaseButtons;
+	private java.util.List<JLabel> buildingLabels;
 
 	public CoffeeGameForm(CoffeeGame game) {
 		this.game = game;
@@ -56,9 +61,13 @@ public class CoffeeGameForm {
 		textUpdater = new Thread(new TextUpdaterRunnable(game, countLabel,
 				cpsLabel));
 
-		initializePurchaseButtons();
+		initializeBuildingsPanel();
+		
+		buildingUpdater = new Thread(new BuildingUpdaterRunnable(game,
+				purchaseButtons, buildingLabels));
 
-		coffeeImgLabel = new JLabel(new ImageIcon(IMAGE_PATH));
+		coffeeImgLabel = new JLabel();
+		coffeeImgLabel.setIcon(new ImageIcon(IMAGE_PATH));
 		coffeeImgLabel.addMouseListener(
 				new CoffeeClickListener(game.getPlayer()));
 
@@ -73,34 +82,44 @@ public class CoffeeGameForm {
 
 		window.add(northPanel, BorderLayout.NORTH);
 		window.add(centerPanel, BorderLayout.CENTER);
+		window.add(leftEastPanel, BorderLayout.EAST);
 		window.add(eastPanel, BorderLayout.EAST);
 	}
 
-	private void initializePurchaseButtons() {
+	private void initializeBuildingsPanel() {
 		purchaseButtons = new ArrayList<JButton>();
+		buildingLabels = new ArrayList<JLabel>();
+		
 		CoffeePlayer player = game.getPlayer();
+		BuildingList buildings = player.getBuildingList();
 
-		for (Building b : player.getBuildingList().getAllBuildings()) {
-			JButton button = new JButton("Buy 1 " + b.getName() +
-					" (" + b.getPrice() + ")");
+		for (Building b : buildings.getAllBuildings()) {
+			JButton button = new JButton(LOADING_TEXT);
 			button.addActionListener(new BuildingPurchaseListener(player, b,
 					button));
 			purchaseButtons.add(button);
+			buildingLabels.add(new JLabel("0"));
 		}
+		
+		int size = buildings.size();
 
-		eastPanel = new JPanel(new GridLayout(purchaseButtons.size(), 1));
-		for (JButton b : purchaseButtons) {
-			eastPanel.add(b); // add buttons to the panel
+		eastPanel = new JPanel(new GridLayout(size, 1));
+		leftEastPanel = new JPanel(new GridLayout(size, 1));
+		for (int i = 0; i < buildings.size(); i++) {
+			leftEastPanel.add(buildingLabels.get(i));
+			eastPanel.add(purchaseButtons.get(i));
 		}
 	}
 
 	public void show() {
 		window.setVisible(true);
 		textUpdater.start();
+		buildingUpdater.start();
 	}
 
 	public void close() {
 		window.setVisible(false);
 		textUpdater.interrupt();
+		buildingUpdater.interrupt();
 	}
 }

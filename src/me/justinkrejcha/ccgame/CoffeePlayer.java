@@ -21,8 +21,7 @@ public class CoffeePlayer extends Player {
 	}
 	
 	public CoffeePlayer(String name) {
-		//TODO: Remove testing code
-		this(name, false, 1.0, 1.0, 1.0, CoffeeGame.createDefaultBuildings());
+		this(name, false, 0.0, 0.0, 0.0, CoffeeGame.createDefaultBuildings());
 	}
 	
 	public CoffeePlayer(String name, boolean cheated, double coffees, 

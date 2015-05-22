@@ -14,19 +14,15 @@ public class BuildingList {
 	public BuildingList(List<Building> buildings) {
 		Util.validateNoNullElements(buildings);
 		this.buildings = buildings;
-		validateDifferentIds();
 	}
 	
 	/**
-	* Gets a building by it's ID
-	* @param id ID of building to get
-	* @return Building that has the same id or null if doesn't exist.
+	* Gets a building by it's position
+	* @param pos Position of building to get
+	* @return Building at position
 	*/
-	public Building get(int id) {
-		for (Building b : buildings) {
-			if (b.getId() == id) return b;
-		}
-		return null;
+	public Building get(int pos) {
+		return buildings.get(pos);
 	}
 	
 	/**
@@ -59,13 +55,5 @@ public class BuildingList {
 
 	public Building[] getAllBuildings() {
 		return buildings.toArray(new Building[size()]);
-	}
-	
-	private void validateDifferentIds() {
-		List<Integer> ids = new ArrayList<Integer>();
-		for (Building b : buildings) {
-			ids.add(b.getId());
-		}
-		Util.validateElementsDifferent(ids);
 	}
 }

@@ -1,26 +1,20 @@
 package me.justinkrejcha.ccgame;
 
 public class Building {
-	private int id;
 	private String name;
 	private int basePrice;
 	private int amount;
 	private double bonus;
 	
-	public Building(int id, String name, int basePrice, double bonus) {
-		this(id, name, basePrice, 0, bonus);
+	public Building(String name, int basePrice, double bonus) {
+		this(name, basePrice, 0, bonus);
 	}
 	
-	public Building(int id, String name, int basePrice, int amount, double bonus) {
-		this.id = id;
+	public Building(String name, int basePrice, int amount, double bonus) {
 		this.name = name;
 		this.basePrice = basePrice;
 		this.amount = amount;
 		this.bonus = bonus;
-	}
-	
-	public int getId() {
-		return id;
 	}
 	
 	/**
@@ -70,15 +64,11 @@ public class Building {
 	
 	/**
 	* Returns the price to buy another building.<br>
-	* <b>Formula:</b> Base Cost * (1.15 ^ Amount owned - 1) / 0.15
+	* <b>Formula:</b> Base Cost * (1.15 ^ Amount owned)
 	* @return The new price to buy another building.
 	*/
 	public long getPrice() {
-		// base cost * (1.15^amount - 1) / 0.15
-		if (amount == 0) {
-			return (long)basePrice;
-		}
-		return (long)((long)basePrice * (Math.pow(1.15, amount) - 1) / 0.15);
+		return (long) Math.ceil(basePrice * Math.pow(1.15, amount));
 	}
 	
 	/**

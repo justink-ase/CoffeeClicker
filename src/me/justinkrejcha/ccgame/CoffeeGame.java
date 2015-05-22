@@ -8,6 +8,8 @@ import me.justinkrejcha.game.*;
 public class CoffeeGame extends SinglePlayerGame {
 	private Thread autoClickerThread;
 	private int fps;
+	
+	public static String BUTTON_TEXT = "Buy 1 {0} ({1} coffees)";
 
 	/**
 	* Constructor for a new game.
@@ -46,11 +48,11 @@ public class CoffeeGame extends SinglePlayerGame {
 	
 	public static BuildingList createDefaultBuildings() {
 		List<Building> l = new ArrayList<Building>();
-		l.add(new Building(0, "Stirrer", 15, 0.1));
-		l.add(new Building(1, "Coffee Pot", 100, 0.5));
-		l.add(new Building(2, "Brewery", 600, 5));
-		l.add(new Building(3, "Factory", 3250, 15));
-		l.add(new Building(4, "Cocoa Plant", 11000, 50));
+		l.add(new Building("Stirrer", 15, 0.1));
+		l.add(new Building("Coffee Pot", 100, 0.5));
+		l.add(new Building("Brewery", 600, 5));
+		l.add(new Building("Factory", 3250, 15));
+		l.add(new Building("Cocoa Plant", 11000, 50));
 		return new BuildingList(l);
 	}
 }
