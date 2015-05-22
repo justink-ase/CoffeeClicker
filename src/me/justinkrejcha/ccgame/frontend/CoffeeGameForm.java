@@ -17,8 +17,9 @@ public class CoffeeGameForm {
 	private Thread buildingUpdater;
 
 	private static String LOADING_TEXT = "Loading...";
-	private static String IMAGE_PATH = "H:/AP Comp Sci/Final/Coffee Clicker Project/src/data/coffee.png";
-	//private static String IMAGE_PATH = "/data/coffee.png";
+	private static String RES_DIRECTORY = System.getProperty("user.dir") +
+			"\\resources\\";
+	private static String IMAGE_PATH = RES_DIRECTORY + "coffee.png";
 
 	private JFrame window;
 	private JPanel northPanel;
