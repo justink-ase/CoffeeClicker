@@ -60,11 +60,13 @@ public class CoffeeGame extends SinglePlayerGame {
 		return new BuildingList(l);
 	}
 
-	public void load(String file) {
-
+	public void load(java.nio.file.Path file) throws java.io.IOException {
+		stop();
+		setPlayer(CoffeePlayer.load(file));
+		start();
 	}
 
-	public void save(String file) {
-
+	public void save(java.nio.file.Path file) throws java.io.IOException {
+		getPlayer().save(file);
 	}
 }

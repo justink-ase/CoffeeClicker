@@ -151,6 +151,47 @@ public class CoffeeGameForm {
 			c.gridy++; //increment row
 		}
 	}
+	
+	/**
+	* Saves the game. Optionally can show a warning.
+	* @param ifShowWarning Only save if 'Yes' is clicked on the warning dialog.
+	* @return If we should continue loading/exiting.
+	*/
+	public boolean save(boolean ifShowWarning) {
+		if (ifShowWarning) {
+			int result = showUnsavedProgressWarning();
+			if (result == JOptionPane.CANCEL_OPTION) {
+				return false;
+			} else if (result == JOptionPane.NO_OPTION) {
+				return true;
+			}
+		}
+		JFileChooser f = new JFileChooser();
+
+		if (f.showSaveDialog(window) == JFileChooser.APPROVE_OPTION) {
+			try {
+				game.save(f.getSelectedFile().toPath());
+			} catch (java.io.IOException e) {
+				return false;
+			}
+		} else {
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean load() {
+		JFileChooser f = new JFileChooser();
+		if (f.showOpenDialog(window) == JFileChooser.APPROVE_OPTION) {
+			try {
+				game.load(f.getSelectedFile().toPath());
+				return true;
+			} catch (java.io.IOException e) {
+				return false;
+			}
+		}
+		return false;
+	}
 
 	public void show() {
 		window.setVisible(true);

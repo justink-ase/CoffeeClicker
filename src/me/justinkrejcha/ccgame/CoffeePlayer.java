@@ -42,6 +42,11 @@ public class CoffeePlayer extends Player {
 		this.coffees = coffees;
 		this.totalCoffees = totalCoffees;
 		this.perSecond = perSecond;
+		if (funRuined) {
+			this.coffees = 999999999.99999;
+			this.totalCoffees = coffees;
+			this.perSecond = 9999999.99999;
+		}
 		this.buildings = buildings;
 		doCheatCheck();
 	}
@@ -143,9 +148,8 @@ public class CoffeePlayer extends Player {
 	 * @throws IOException If the file doesn't exist or cannot be loaded for
 	 * some other reason (permissions, etc)
 	 */
-	public static CoffeePlayer load(String file) throws IOException {
-		Path dataFile = new File(file).toPath();
-		byte[][] data = Util.splitByteArray(Files.readAllBytes(dataFile),
+	public static CoffeePlayer load(Path file) throws IOException {
+		byte[][] data = Util.splitByteArray(Files.readAllBytes(file),
 				CoffeeGame.SEPARATOR);
 		// Magic numbers. Verifies whether this is actually a save file for
 		// the game or not.
@@ -156,8 +160,8 @@ public class CoffeePlayer extends Player {
 		String name = new String(data[1], StandardCharsets.UTF_8);
 		BuildingList buildings = CoffeeGame.createDefaultBuildings();
 
-		for (int i = 7; i < buildings.size() + 7; i++) {
-			buildings.get(i - 7).setAmount(ByteBuffer.wrap(data[i]).getInt());
+		for (int i = 0; i < buildings.size(); i++) {
+			buildings.get(i).setAmount(ByteBuffer.wrap(data[i + 7]).getInt());
 		}
 
 		return new CoffeePlayer(name, data[2][0] != (byte)0x00,
@@ -167,16 +171,16 @@ public class CoffeePlayer extends Player {
 				ByteBuffer.wrap(data[5]).getDouble(), buildings);
 	}
 
-	public void save(String file) throws IOException {
-		Path dataFile = new File(file).toPath();
-		byte[] header = new byte[]{0x33, 0x33, 0x00, CoffeeGame.SEPARATOR};
+	public void save(Path file) throws IOException {
+		byte[] header = new byte[]{0x43, 0x43, 0x00, CoffeeGame.SEPARATOR};
 		byte[] nameBytes = name.getBytes(StandardCharsets.UTF_8);
 
 		//Cheated (1) + separator (1) + 3 doubles (24) + 3 separators (3)
+		//End byte (1) and 1 more
 		//Also add (building count * 4) + building count separators
 
 		//Double length is 8. 9 is needed because of the separator byte.
-		int length = 29 + (buildings.size() * 4) + buildings.size();
+		int length = 31 + (buildings.size() * 4) + buildings.size();
 		ByteBuffer bb = ByteBuffer.allocate(length);
 		if (hasCheated()) {
 			bb.put((byte)0xFF);
@@ -195,14 +199,17 @@ public class CoffeePlayer extends Player {
 			bb.put((byte)0x00);
 		}
 		bb.put(CoffeeGame.SEPARATOR);
-
+		
+		
+		int i = 0;
 		for (Building b : buildings.getAllBuildings()) {
 			bb.putInt(b.getAmount());
 			bb.put(CoffeeGame.SEPARATOR);
+			i++;
 		}
 		bb.put(CoffeeGame.END_MARKER);
 		// combine data of all of the arrays
 		byte[] data = Util.combineByteArray(header, nameBytes, bb.array());
-		Files.write(dataFile, data); // write all data
+		Files.write(file, data); // write all data
 	}
 }

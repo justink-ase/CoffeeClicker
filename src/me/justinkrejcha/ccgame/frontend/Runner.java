@@ -18,7 +18,7 @@ public class Runner {
 			return;
 		}
 
-		//String name = getName(); //TODO: Use getName() instead of ""
+		//String name = getName(); //TODO: Use getName() instead of test value
 		String name = "A random tester";
 		CoffeeGame game = new CoffeeGame(new CoffeePlayer(name));
 		

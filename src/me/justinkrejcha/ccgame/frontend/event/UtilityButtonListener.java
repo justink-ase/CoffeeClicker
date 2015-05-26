@@ -32,13 +32,14 @@ public class UtilityButtonListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (eventType) {
 			case INFO:
-
+				
 				break;
 			case LOAD:
-
+				if (!form.save(true)) return;
+				form.load();
 				break;
 			case SAVE:
-
+				form.save(false);
 				break;
 		}
 	}
