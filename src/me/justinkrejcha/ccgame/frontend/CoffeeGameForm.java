@@ -51,8 +51,8 @@ public class CoffeeGameForm {
 		window = new JFrame("Coffee Clicker");
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setResizable(false);
-		window.setSize(new Dimension(500, 450));
-		window.setLocation(new Point(200, 400));
+		window.setSize(new Dimension(500, 470));
+		window.setLocation(new Point(400, 200));
 		window.setLayout(new BorderLayout());
 
 		northPanel = new JPanel(new GridLayout(3, 0));
@@ -101,7 +101,7 @@ public class CoffeeGameForm {
 		centerPanel = new JPanel();
 		centerPanel.add(coffeeImgLabel);
 
-		bottomPanel = new JPanel(new GridLayout(3, 1));
+		bottomPanel = new JPanel(new GridLayout(1, 3));
 		bottomPanel.add(infoButton);
 		bottomPanel.add(loadButton);
 		bottomPanel.add(saveButton);
@@ -109,6 +109,7 @@ public class CoffeeGameForm {
 		window.add(northPanel, BorderLayout.NORTH);
 		window.add(centerPanel, BorderLayout.CENTER);
 		window.add(eastPanel, BorderLayout.EAST);
+		window.add(bottomPanel, BorderLayout.SOUTH);
 	}
 
 	private void initializeBuildingsPanel() {

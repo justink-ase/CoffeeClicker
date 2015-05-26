@@ -10,7 +10,7 @@ public class TestRunner {
 		URL location = TestRunner.class.getProtectionDomain().getCodeSource().getLocation();
         System.out.println(location.getFile());
 		
-		CoffeePlayer p = new CoffeePlayer("Test", false, 15000.0,
+		CoffeePlayer p = new CoffeePlayer("Test", false, false, 15000.0,
 				Double.MAX_VALUE, 150.0, CoffeeGame.createDefaultBuildings());
 		CoffeeGame g = new CoffeeGame(p);
 		g.start();
