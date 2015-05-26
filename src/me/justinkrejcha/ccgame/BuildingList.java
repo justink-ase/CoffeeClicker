@@ -5,12 +5,18 @@ import java.util.ArrayList;
 
 import me.justinkrejcha.Util;
 
+/**
+ * This class contains buildings and some helper methods for the game.
+ */
 public class BuildingList {
 	private List<Building> buildings;
-	
+
 	/**
-	* TODO: Javadoc
-	*/
+	 * Creates a new {@link BuildingList}
+	 * @param buildings The buildings to create the method game.
+	 * @throws java.lang.NullPointerException if any elements in buildings
+	 * are null
+	 */
 	public BuildingList(List<Building> buildings) {
 		Util.validateNoNullElements(buildings);
 		this.buildings = buildings;
@@ -44,7 +50,13 @@ public class BuildingList {
 		}
 		return total;
 	}
-	
+
+	/**
+	 * Gets the total coffees per second bonus that all of the buildings
+	 * there are.
+	 * @return The sum of each buildings coffees per second bonus.
+	 * @see me.justinkrejcha.ccgame.Building#getTotalBonus
+	 */
 	public double getTotalBonus() {
 		double bonus = 0.0;
 		for (Building b : buildings) {
@@ -53,6 +65,10 @@ public class BuildingList {
 		return bonus;
 	}
 
+	/**
+	 * Gets all of the buildings as an array.
+	 * @return Array of all buildings.
+	 */
 	public Building[] getAllBuildings() {
 		return buildings.toArray(new Building[size()]);
 	}

@@ -10,6 +10,10 @@ public class CoffeeGame extends SinglePlayerGame {
 	private int fps;
 	
 	public static String BUTTON_TEXT = "Buy 1 {0} ({1} coffees)";
+	public static String HOVER_TEXT = "You have {0} of the {1} building";
+
+	public static byte END_MARKER = 0x03;
+	public static byte SEPARATOR = 0x1D;
 
 	/**
 	* Constructor for a new game.
@@ -54,5 +58,13 @@ public class CoffeeGame extends SinglePlayerGame {
 		l.add(new Building("Factory", 3250, 15));
 		l.add(new Building("Cocoa Plant", 11000, 50));
 		return new BuildingList(l);
+	}
+
+	public void load(String file) {
+
+	}
+
+	public void save(String file) {
+
 	}
 }

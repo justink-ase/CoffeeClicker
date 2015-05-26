@@ -21,16 +21,23 @@ public class CoffeeGameForm {
 			"\\resources\\";
 	private static String IMAGE_PATH = RES_DIRECTORY + "coffee.png";
 
+	private static String UNSAVED_WARNING = "Some progress has not been saved" +
+			". Would you like to save your progress now?";
+
 	private JFrame window;
 	private JPanel northPanel;
 	private JPanel eastPanel;
 	private JPanel centerPanel;
-	private JPanel leftEastPanel;
+	private JPanel bottomPanel;
 	
 	private JLabel nameLabel;
 	private JLabel countLabel;
 	private JLabel cpsLabel;
 	private JLabel coffeeImgLabel;
+
+	private JButton infoButton;
+	private JButton saveButton;
+	private JButton loadButton;
 
 	private java.util.List<JButton> purchaseButtons;
 	private java.util.List<JLabel> buildingLabels;
@@ -44,7 +51,7 @@ public class CoffeeGameForm {
 		window = new JFrame("Coffee Clicker");
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setResizable(false);
-		window.setSize(new Dimension(500, 400));
+		window.setSize(new Dimension(500, 450));
 		window.setLocation(new Point(200, 400));
 		window.setLayout(new BorderLayout());
 
@@ -72,6 +79,19 @@ public class CoffeeGameForm {
 		coffeeImgLabel.addMouseListener(
 				new CoffeeClickListener(game.getPlayer()));
 
+
+		infoButton = new JButton("Info");
+		infoButton.addActionListener(new UtilityButtonListener(game, this,
+				EventType.INFO));
+
+		loadButton = new JButton("Load");
+		loadButton.addActionListener(new UtilityButtonListener(game, this,
+				EventType.LOAD));
+
+		saveButton = new JButton("Save");
+		saveButton.addActionListener(new UtilityButtonListener(game, this,
+				EventType.SAVE));
+
 		if (game.getPlayer().getName() != null) {
 			northPanel.add(nameLabel);
 		}
@@ -81,9 +101,13 @@ public class CoffeeGameForm {
 		centerPanel = new JPanel();
 		centerPanel.add(coffeeImgLabel);
 
+		bottomPanel = new JPanel(new GridLayout(3, 1));
+		bottomPanel.add(infoButton);
+		bottomPanel.add(loadButton);
+		bottomPanel.add(saveButton);
+
 		window.add(northPanel, BorderLayout.NORTH);
 		window.add(centerPanel, BorderLayout.CENTER);
-		window.add(leftEastPanel, BorderLayout.EAST);
 		window.add(eastPanel, BorderLayout.EAST);
 	}
 
@@ -96,19 +120,34 @@ public class CoffeeGameForm {
 
 		for (Building b : buildings.getAllBuildings()) {
 			JButton button = new JButton(LOADING_TEXT);
-			button.addActionListener(new BuildingPurchaseListener(player, b,
-					button));
 			purchaseButtons.add(button);
-			buildingLabels.add(new JLabel("0"));
+			JLabel label = new JLabel("???");
+			label.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 18));
+			buildingLabels.add(label);
+
+			button.addActionListener(new BuildingPurchaseListener(player, b,
+					button, label));
 		}
-		
+
 		int size = buildings.size();
 
-		eastPanel = new JPanel(new GridLayout(size, 1));
-		leftEastPanel = new JPanel(new GridLayout(size, 1));
-		for (int i = 0; i < buildings.size(); i++) {
-			leftEastPanel.add(buildingLabels.get(i));
-			eastPanel.add(purchaseButtons.get(i));
+		eastPanel = new JPanel(new GridBagLayout());
+
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridy = 0;
+
+		for (int i = 0; i < size; i++) {
+			c.gridy++;
+			c.gridx = 0; //X = 0 on our grid.
+			c.ipady = 0; //set extra height to 0
+
+			eastPanel.add(buildingLabels.get(i), c); //add label
+			c.gridx++; //increment X coordinate
+			c.weightx = 0.5;
+			c.ipady = 40; //height
+			eastPanel.add(purchaseButtons.get(i), c);
+			c.gridy++; //increment row
 		}
 	}
 
@@ -116,6 +155,17 @@ public class CoffeeGameForm {
 		window.setVisible(true);
 		textUpdater.start();
 		buildingUpdater.start();
+	}
+
+	public int showUnsavedProgressWarning() {
+		int option = JOptionPane.showConfirmDialog(window, UNSAVED_WARNING,
+					"Coffee Clicker", JOptionPane.YES_NO_CANCEL_OPTION,
+					JOptionPane.WARNING_MESSAGE);
+		if (option == JOptionPane.CLOSED_OPTION) {
+			option = JOptionPane.CANCEL_OPTION;
+			//set it to cancel if they closed the window
+		}
+		return option;
 	}
 
 	public void close() {

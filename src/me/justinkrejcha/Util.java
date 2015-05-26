@@ -1,5 +1,6 @@
 package me.justinkrejcha;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,6 +37,50 @@ public class Util {
 			if (!b) return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Splits an array into a list of byte arrays
+	 * @param array     Array to split
+	 * @param separator Separator byte to use
+	 * @return List of arrays containing the split data.
+	 */
+	public static byte[][] splitByteArray(byte[] array, byte separator) {
+		List<Byte[]> bytes = new ArrayList<Byte[]>();
+		List<Byte> subBytes = new ArrayList<Byte>();
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] != separator) {
+				subBytes.add(array[i]);
+			} else {
+				bytes.add(subBytes.toArray(new Byte[0]));
+				subBytes = new ArrayList<Byte>();
+			}
+		}
+		byte[][] converted = new byte[bytes.size()][];
+		for (int i = 0; i < converted.length; i++) {
+			Byte[] subData = bytes.get(i);
+			converted[i] = new byte[subData.length];
+			for (int j = 0; j < converted[i].length; j++) {
+				converted[i][j] = subData[j];
+			}
+		}
+		return converted;
+	}
+
+	public static byte[] combineByteArray(byte[]... arrays) {
+		int totalSize = 0;
+		for (byte[] b : arrays) {
+			totalSize += b.length;
+		}
+		byte[] combined = new byte[totalSize];
+		int position = 0;
+		for (int i = 0; i < arrays.length; i++) {
+			for (int j = 0; j < arrays[i].length; j++) {
+				combined[position] = arrays[i][j];
+				position++;
+			}
+		}
+		return combined;
 	}
 	
 	/**
