@@ -67,17 +67,17 @@ public class CoffeeGameForm {
 		cpsLabel.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 16));
 
 		textUpdater = new Thread(new TextUpdaterRunnable(game, countLabel,
-				cpsLabel));
+				cpsLabel), "Text Updater Thread");
 
 		initializeBuildingsPanel();
 		
 		buildingUpdater = new Thread(new BuildingUpdaterRunnable(game,
-				purchaseButtons, buildingLabels));
+				purchaseButtons, buildingLabels), "Building Updater Thread");
 
 		coffeeImgLabel = new JLabel();
 		coffeeImgLabel.setIcon(new ImageIcon(IMAGE_PATH));
 		coffeeImgLabel.addMouseListener(
-				new CoffeeClickListener(game.getPlayer()));
+				new CoffeeClickListener(game));
 
 
 		infoButton = new JButton("Info");
@@ -126,7 +126,7 @@ public class CoffeeGameForm {
 			label.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 18));
 			buildingLabels.add(label);
 
-			button.addActionListener(new BuildingPurchaseListener(player, b,
+			button.addActionListener(new BuildingPurchaseListener(game, b,
 					button, label));
 		}
 

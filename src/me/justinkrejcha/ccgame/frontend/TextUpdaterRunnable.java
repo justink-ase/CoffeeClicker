@@ -27,9 +27,9 @@ public class TextUpdaterRunnable implements Runnable {
 	* The method that the CpS task executes when it's started.
 	*/
 	public void run() {
-		CoffeePlayer p = game.getPlayer();
 		DecimalFormat f = new DecimalFormat("#.#");
 		while (!Thread.interrupted()) {
+			CoffeePlayer p = game.getPlayer();
 			label.setText("Coffees: " + f.format(p.getCoffees()));
 			cpsLabel.setText("per second: " + f.format(p.getPerSecond()));
 			try {

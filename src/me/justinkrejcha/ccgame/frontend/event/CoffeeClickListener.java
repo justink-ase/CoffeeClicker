@@ -1,5 +1,6 @@
 package me.justinkrejcha.ccgame.frontend.event;
 
+import me.justinkrejcha.ccgame.CoffeeGame;
 import me.justinkrejcha.ccgame.CoffeePlayer;
 
 import java.awt.event.MouseEvent;
@@ -10,10 +11,10 @@ import java.awt.event.MouseListener;
  * @since 5/20/2015 7:48 PM
  */
 public class CoffeeClickListener implements MouseListener {
-	private CoffeePlayer player;
+	private CoffeeGame game;
 
-	public CoffeeClickListener(CoffeePlayer player) {
-		this.player = player;
+	public CoffeeClickListener(CoffeeGame game) {
+		this.game = game;
 	}
 
 	/**
@@ -27,7 +28,7 @@ public class CoffeeClickListener implements MouseListener {
 	 */
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		player.increment();
+		game.getPlayer().increment();
 	}
 
 	/**

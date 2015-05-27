@@ -29,7 +29,6 @@ public class CoffeeGame extends SinglePlayerGame {
 	public CoffeeGame(CoffeePlayer p, int fps) {
 		this.setPlayer(p);
 		this.fps = fps;
-		this.autoClickerThread = new Thread(new AutoCoffeeRunnable(this));
 	}
 	
 	public CoffeePlayer getPlayer() {
@@ -41,6 +40,8 @@ public class CoffeeGame extends SinglePlayerGame {
 	}
 	
 	public void start() {
+		this.autoClickerThread = new Thread(new AutoCoffeeRunnable(this),
+				"Auto Clicker Thread");
 		autoClickerThread.start();
 		setGameRunning(true);
 	}

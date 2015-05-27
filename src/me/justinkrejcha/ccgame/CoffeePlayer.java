@@ -153,8 +153,8 @@ public class CoffeePlayer extends Player {
 				CoffeeGame.SEPARATOR);
 		// Magic numbers. Verifies whether this is actually a save file for
 		// the game or not.
-		if (data[0][0] != 0x33 || data[0][1] != 0x33) {
-			//TODO: Throw an exception here!
+		if (data.length < 6 || data[0][0] != 0x43 || data[0][1] != 0x43) {
+			throw new IllegalStateException("Not a save file");
 		}
 
 		String name = new String(data[1], StandardCharsets.UTF_8);
@@ -174,14 +174,15 @@ public class CoffeePlayer extends Player {
 	public void save(Path file) throws IOException {
 		byte[] header = new byte[]{0x43, 0x43, 0x00, CoffeeGame.SEPARATOR};
 		byte[] nameBytes = name.getBytes(StandardCharsets.UTF_8);
-
-		//Cheated (1) + separator (1) + 3 doubles (24) + 3 separators (3)
-		//End byte (1) and 1 more
-		//Also add (building count * 4) + building count separators
+		/*
+		Sep. byte (1) + cheated (1) + sep. byte (1) + 3 doubles (24) + 3 sep.
+		bytes (3). Add building ct. * 5) + End byte (1) + padding (1)
+		 */
 
 		//Double length is 8. 9 is needed because of the separator byte.
-		int length = 31 + (buildings.size() * 4) + buildings.size();
+		int length = 32 + (buildings.size() * 5);
 		ByteBuffer bb = ByteBuffer.allocate(length);
+		bb.put(CoffeeGame.SEPARATOR);
 		if (hasCheated()) {
 			bb.put((byte)0xFF);
 		} else {
@@ -193,19 +194,17 @@ public class CoffeePlayer extends Player {
 		bb.putDouble(totalCoffees);
 		bb.put(CoffeeGame.SEPARATOR);
 		bb.putDouble(perSecond);
+		bb.put(CoffeeGame.SEPARATOR);
 		if (funRuined) {
 			bb.put((byte)0xFF);
 		} else {
 			bb.put((byte)0x00);
 		}
 		bb.put(CoffeeGame.SEPARATOR);
-		
-		
-		int i = 0;
+
 		for (Building b : buildings.getAllBuildings()) {
 			bb.putInt(b.getAmount());
 			bb.put(CoffeeGame.SEPARATOR);
-			i++;
 		}
 		bb.put(CoffeeGame.END_MARKER);
 		// combine data of all of the arrays
