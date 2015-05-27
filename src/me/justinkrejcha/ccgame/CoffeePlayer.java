@@ -36,17 +36,15 @@ public class CoffeePlayer extends Player {
 	public CoffeePlayer(String name, boolean cheated, boolean funRuined,
 	                    double coffees, double totalCoffees, double perSecond,
 						BuildingList buildings) {
+		if (name != null && name.trim().equals("")) {
+			name = null;
+		}
 		this.name = name;
 		this.cheated = cheated;
 		this.funRuined = funRuined;
 		this.coffees = coffees;
 		this.totalCoffees = totalCoffees;
 		this.perSecond = perSecond;
-		if (funRuined) {
-			this.coffees = 999999999.99999;
-			this.totalCoffees = coffees;
-			this.perSecond = 9999999.99999;
-		}
 		this.buildings = buildings;
 		doCheatCheck();
 	}
@@ -114,7 +112,7 @@ public class CoffeePlayer extends Player {
 	}
 	
 	public boolean canBuy(Building b) {
-		return coffees >= b.getPrice();
+		return coffees >= b.getPrice() || funRuined;
 	}
 	
 	private void doCheatCheck() {
@@ -173,14 +171,18 @@ public class CoffeePlayer extends Player {
 
 	public void save(Path file) throws IOException {
 		byte[] header = new byte[]{0x43, 0x43, 0x00, CoffeeGame.SEPARATOR};
-		byte[] nameBytes = name.getBytes(StandardCharsets.UTF_8);
+		byte[] nameBytes = new byte[0];
+
+		if (name != null) {
+			nameBytes = name.getBytes(StandardCharsets.UTF_8);
+		}
 		/*
 		Sep. byte (1) + cheated (1) + sep. byte (1) + 3 doubles (24) + 3 sep.
 		bytes (3). Add building ct. * 5) + End byte (1) + padding (1)
 		 */
 
 		//Double length is 8. 9 is needed because of the separator byte.
-		int length = 32 + (buildings.size() * 5);
+		int length = 33 + (buildings.size() * 5);
 		ByteBuffer bb = ByteBuffer.allocate(length);
 		bb.put(CoffeeGame.SEPARATOR);
 		if (hasCheated()) {

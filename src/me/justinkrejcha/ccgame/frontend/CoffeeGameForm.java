@@ -5,6 +5,7 @@ import me.justinkrejcha.ccgame.frontend.event.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.nio.BufferUnderflowException;
 import java.util.ArrayList;
 
 /**
@@ -23,6 +24,9 @@ public class CoffeeGameForm {
 
 	private static String UNSAVED_WARNING = "Some progress has not been saved" +
 			". Would you like to save your progress now?";
+
+	private static String LOAD_ERROR = "An error occurred while loading your " +
+			"save file. Please try again with another save file.";
 
 	private JFrame window;
 	private JPanel northPanel;
@@ -55,24 +59,7 @@ public class CoffeeGameForm {
 		window.setLocation(new Point(400, 200));
 		window.setLayout(new BorderLayout());
 
-		northPanel = new JPanel(new GridLayout(3, 0));
-
-		nameLabel = new JLabel(game.getPlayer().getName() + "'s Coffee Shop");
-		nameLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 16));
-
-		countLabel = new JLabel(LOADING_TEXT);
-		countLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 24));
-
-		cpsLabel = new JLabel(LOADING_TEXT);
-		cpsLabel.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 16));
-
-		textUpdater = new Thread(new TextUpdaterRunnable(game, countLabel,
-				cpsLabel), "Text Updater Thread");
-
 		initializeBuildingsPanel();
-		
-		buildingUpdater = new Thread(new BuildingUpdaterRunnable(game,
-				purchaseButtons, buildingLabels), "Building Updater Thread");
 
 		coffeeImgLabel = new JLabel();
 		coffeeImgLabel.setIcon(new ImageIcon(IMAGE_PATH));
@@ -92,12 +79,6 @@ public class CoffeeGameForm {
 		saveButton.addActionListener(new UtilityButtonListener(game, this,
 				EventType.SAVE));
 
-		if (game.getPlayer().getName() != null) {
-			northPanel.add(nameLabel);
-		}
-		northPanel.add(countLabel);
-		northPanel.add(cpsLabel);
-
 		centerPanel = new JPanel();
 		centerPanel.add(coffeeImgLabel);
 
@@ -106,13 +87,57 @@ public class CoffeeGameForm {
 		bottomPanel.add(loadButton);
 		bottomPanel.add(saveButton);
 
-		window.add(northPanel, BorderLayout.NORTH);
+		initializeTopPanel();
+
 		window.add(centerPanel, BorderLayout.CENTER);
-		window.add(eastPanel, BorderLayout.EAST);
 		window.add(bottomPanel, BorderLayout.SOUTH);
 	}
 
+	/**
+	 * This method redraws the top panel with the name and coffees (and per
+	 * second). This is so we can put a re-insert or remove a name when it's
+	 * running if we need to.
+	 */
+	private void initializeTopPanel() {
+		if (textUpdater != null) {
+			textUpdater.interrupt(); // stop auto updating
+		}
+		if (northPanel != null) {
+			window.remove(northPanel);
+		}
+
+		northPanel = new JPanel(new GridLayout(3, 0));
+
+		nameLabel = new JLabel(game.getPlayer().getName() + "'s Coffee Shop");
+		nameLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 16));
+
+		countLabel = new JLabel(LOADING_TEXT);
+		countLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 24));
+
+		cpsLabel = new JLabel(LOADING_TEXT);
+		cpsLabel.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 16));
+
+		if (game.getPlayer().getName() != null) {
+			northPanel.add(nameLabel);
+		}
+		northPanel.add(countLabel);
+		northPanel.add(cpsLabel);
+
+		textUpdater = new Thread(new TextUpdaterRunnable(game, countLabel,
+				cpsLabel), "Text Updater Thread");
+		textUpdater.start();
+
+		window.add(northPanel, BorderLayout.NORTH);
+	}
+
 	private void initializeBuildingsPanel() {
+		if (buildingUpdater != null) {
+			buildingUpdater.interrupt(); // stop auto updating
+		}
+		if (eastPanel != null) {
+			window.remove(eastPanel);
+		}
+
 		purchaseButtons = new ArrayList<JButton>();
 		buildingLabels = new ArrayList<JLabel>();
 		
@@ -150,6 +175,13 @@ public class CoffeeGameForm {
 			eastPanel.add(purchaseButtons.get(i), c);
 			c.gridy++; //increment row
 		}
+
+		buildingUpdater = new Thread(new BuildingUpdaterRunnable(
+				game.getPlayer(), purchaseButtons, buildingLabels),
+				"Building Updater Thread");
+		buildingUpdater.start();
+
+		window.add(eastPanel, BorderLayout.EAST);
 	}
 	
 	/**
@@ -185,9 +217,14 @@ public class CoffeeGameForm {
 		if (f.showOpenDialog(window) == JFileChooser.APPROVE_OPTION) {
 			try {
 				game.load(f.getSelectedFile().toPath());
+				initializeTopPanel();
+				initializeBuildingsPanel();
 				return true;
 			} catch (java.io.IOException e) {
 				return false;
+			} catch (BufferUnderflowException | IllegalStateException e) {
+				JOptionPane.showMessageDialog(window, LOAD_ERROR, "Error",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		return false;
@@ -195,8 +232,6 @@ public class CoffeeGameForm {
 
 	public void show() {
 		window.setVisible(true);
-		textUpdater.start();
-		buildingUpdater.start();
 	}
 
 	public int showUnsavedProgressWarning() {
