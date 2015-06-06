@@ -30,6 +30,7 @@ public class InfoForm {
 		window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		window.setSize(new Dimension(300, 200));
 		window.setLocation(new Point(400, 200));
+		window.setResizable(false);
 
 		String headerLabel = STATS_HEADER;
 		if (player.getName() != null) {

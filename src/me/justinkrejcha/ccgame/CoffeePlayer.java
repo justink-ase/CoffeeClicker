@@ -152,12 +152,15 @@ public class CoffeePlayer extends Player {
 		// Magic numbers. Verifies whether this is actually a save file for
 		// the game or not.
 		if (data.length < 6 || data[0][0] != 0x43 || data[0][1] != 0x43) {
-			throw new IllegalStateException("Not a save file");
+			throw new IllegalStateException("Not a valid save file");
 		}
 
 		String name = new String(data[1], StandardCharsets.UTF_8);
 		BuildingList buildings = CoffeeGame.createDefaultBuildings();
 
+		if (data.length < buildings.size() + 7) {
+			throw new IllegalStateException("Not a valid save file");
+		}
 		for (int i = 0; i < buildings.size(); i++) {
 			buildings.get(i).setAmount(ByteBuffer.wrap(data[i + 7]).getInt());
 		}

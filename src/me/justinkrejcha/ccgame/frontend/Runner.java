@@ -7,7 +7,10 @@ import javax.swing.*; // graphics! excitement!
 import java.io.File;
 
 public class Runner {
-	
+	/**
+	 * Main entry point for the game. Environment variables are ignored.
+	 * @param args Environment variables are unused.
+	 */
 	public static void main(String[] args) {
 		setSystemLAF();
 
@@ -17,22 +20,42 @@ public class Runner {
 					"Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-
-		String name = getName(); //TODO: Use getName() instead of test value
-		//String name = "A random tester";
+		int selected = JOptionPane.showConfirmDialog(null, 
+						"Would you like to load a save?", "Coffee Clicker",
+						JOptionPane.YES_NO_OPTION);
+							
+		boolean loadSave = selected == JOptionPane.YES_OPTION;
+							
+		String name = null;
+		if (!loadSave) {
+			name = getName();
+		}
 		CoffeeGame game = new CoffeeGame(new CoffeePlayer(name));
-		
 		CoffeeGameForm form = new CoffeeGameForm(game);
-		form.show();
 		game.start();
+		if (loadSave) {
+			if (!form.load()) {
+				form.close();
+				System.exit(0); // exit here
+			}
+		}
+		form.show();
 	}
 	
+	/**
+	 * Shows a dialog box asking the user to enter their name.
+	 * @return Name stripped of leading and trailing whitespace or null if blank
+	 * or the cancel button was selected.
+	 */
 	private static String getName() {
 		String name = "";
 		name = JOptionPane.showInputDialog(null, "Please enter your name " +
 						"(blank for no name):",
-					"Coffee Clicker", JOptionPane.DEFAULT_OPTION);
-		if (name != null && name.equals("")) name = null;
+						"Coffee Clicker", JOptionPane.DEFAULT_OPTION);
+		if (name != null) {
+			name = name.trim();
+			if (name.equals("")) name = null;
+		}
 		return name;
 	}
 
@@ -51,11 +74,11 @@ public class Runner {
 	}
 	
 	/**
-	* Sets the system look and feel, because in my opinion, the default Java
-	* one doesn't look that good...<br>
-	* Taken from the tutorial to set the look and feel.<br>
-	* See: https://docs.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-	*/
+	 * Sets the system look and feel, because in my opinion, the default Java
+	 * one doesn't look that good...<br>
+	 * Taken from the tutorial to set the look and feel.<br>
+	 * See: https://docs.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+	 */
 	private static void setSystemLAF() {
     	try {
         	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

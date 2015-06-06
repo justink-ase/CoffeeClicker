@@ -4,20 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
-* A utility class. Initalization isn't allowed.
-*/
+ * A utility class. Initalization isn't allowed.
+ */
 public class Util {
 	private Util() {
-		// private initalizer to prevent initalization
+		// stops normal initalization
 	}
 	
 	/**
-	* Returns true if any of the elements in the array
-	* are true. The best case for time will be when the first
-	* value is true, and the worst case is when it's false.
-	* @param values The values to test
-	* @return true if any of them are true, false otherwise
-	*/
+	 * Returns true if any of the elements in the array
+	 * are true. The best case for time will be when the first
+	 * value is true, and the worst case is when it's false.
+	 * @param values The values to test
+	 * @return true if any of them are true, false otherwise
+	 */
 	public static boolean any(boolean... values) {
 		for (boolean b : values) {
 			if (b) return true;
@@ -26,12 +26,12 @@ public class Util {
 	}
 	
 	/**
-	* Returns true if all of the elements of the array
-	* are true. The best case for time will be when the first
-	* value is false, and the worse case is when it's true.
-	* @param values The values to test
-	* @return true if all of them are true, false otherwise
-	*/
+	 * Returns true if all of the elements of the array
+	 * are true. The best case for time will be when the first
+	 * value is false, and the worse case is when it's true.
+	 * @param values The values to test
+	 * @return true if all of them are true, false otherwise
+	 */
 	public static boolean all(boolean... values) {
 		for (boolean b : values) {
 			if (!b) return false;
@@ -67,6 +67,11 @@ public class Util {
 		return converted;
 	}
 
+	/**
+	 * Combines multiple byte arrays into one.
+	 * @param arrays Arrays to combine
+	 * @return Combined array
+	 */
 	public static byte[] combineByteArray(byte[]... arrays) {
 		int totalSize = 0;
 		for (byte[] b : arrays) {
@@ -84,9 +89,9 @@ public class Util {
 	}
 	
 	/**
-	* Throws an exception if the value passed is null.
-	* @param obj Object to validate
-	*/
+	 * Throws an exception if the value passed is null.
+	 * @param obj Object to validate
+	 */
 	public static void validateNotNull(Object obj) {
 		if (obj == null) {
 			throw new NullPointerException("Expected non-null object but was null");
@@ -94,10 +99,10 @@ public class Util {
 	}
 	
 	/**
-	* Throws an exception if the value contains any null
-	* elements or if the object is null.
-	* @param obj List to validate
-	*/
+	 * Throws an exception if the value contains any null
+	 * elements or if the object is null.
+	 * @param obj List to validate
+	 */
 	public static void validateNoNullElements(List obj) {
 		validateNotNull(obj);
 		for (Object element : obj) {
@@ -106,9 +111,9 @@ public class Util {
 	}
 	
 	/**
-	* Validates that each element in this list is different and the list is not null.
-	* @param obj List to validate
-	*/
+	 * Validates that each element in this list is different and the list is not null.
+	 * @param obj List to validate
+	 */
 	public static void validateElementsDifferent(List obj) {
 		validateNotNull(obj);
 		for (int i = 0; i < obj.size(); i++) {
@@ -122,11 +127,11 @@ public class Util {
 	}
 	
 	/**
-	* Formats a string and returns it.
-	* @param format Format to use
-	* @param args   Arguments
-	* @return Formatted string
-	*/
+	 * Formats a string and returns it.
+	 * @param format Format to use
+	 * @param args   Arguments
+	 * @return Formatted string
+	 */
 	public static String format(String format, String... args) {
 		String newStr = format;
 		for (int i = 0; i < args.length; i++) {

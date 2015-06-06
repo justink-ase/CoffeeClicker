@@ -40,6 +40,9 @@ public class CoffeeGame extends SinglePlayerGame {
 	}
 	
 	public void start() {
+		if (autoClickerThread != null) {
+			autoClickerThread.interrupt(); 
+		}
 		this.autoClickerThread = new Thread(new AutoCoffeeRunnable(this),
 				"Auto Clicker Thread");
 		autoClickerThread.start();
@@ -47,6 +50,9 @@ public class CoffeeGame extends SinglePlayerGame {
 	}
 	
 	public void stop() {
+		if (!isGameRunning()) {
+			throw new IllegalStateException("Non-running game cannot be stopped.");
+		} 
 		autoClickerThread.interrupt(); //send interrupt to it
 		setGameRunning(false);
 	}
@@ -66,7 +72,12 @@ public class CoffeeGame extends SinglePlayerGame {
 		setPlayer(CoffeePlayer.load(file));
 		start();
 	}
-
+	
+	/**
+	* Saves the player's player data.
+	* @param file The file to save it to.
+	* @throws java.io.IOException if there is an IO error or 
+	*/
 	public void save(java.nio.file.Path file) throws java.io.IOException {
 		getPlayer().save(file);
 	}
