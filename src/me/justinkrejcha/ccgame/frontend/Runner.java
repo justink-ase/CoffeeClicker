@@ -76,21 +76,18 @@ public class Runner {
 	/**
 	 * Sets the system look and feel, because in my opinion, the default Java
 	 * one doesn't look that good...<br>
-	 * Taken from the tutorial to set the look and feel.<br>
+	 * Adapted from the tutorial to set the look and feel.<br>
 	 * See: https://docs.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
 	 */
 	private static void setSystemLAF() {
     	try {
         	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-    	} catch (UnsupportedLookAndFeelException e) {
+    	} catch (UnsupportedLookAndFeelException |
+			    ClassNotFoundException |
+			    InstantiationException |
+			    IllegalAccessException e) {
 
-   		} catch (ClassNotFoundException e) {
-
-    	} catch (InstantiationException e) {
-
-    	} catch (IllegalAccessException e) {
-
-		}
+   		}
 		// Use the default if it somehow fails (which it shouldn't)...
 	}
 }

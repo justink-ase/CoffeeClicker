@@ -46,10 +46,10 @@ public class InfoForm {
 				"<br><br>Buildings: " + getCount();
 
 		if (player.hasCheated()) {
-			main = main + "<br><br>Cheated: Yes";
-		}
-		if (player.isFunRuined()) {
-			main = main + "<br>- This player also ruined the fun :(";
+			main += "<br><br>Cheated: Yes";
+			if (player.isFunRuined()) {
+				main += "<br>- This player also ruined the fun :(";
+			}
 		}
 
 		mainText = new JLabel();

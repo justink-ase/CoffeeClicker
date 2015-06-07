@@ -5,10 +5,12 @@ import me.justinkrejcha.ccgame.frontend.event.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.nio.BufferUnderflowException;
 import java.util.ArrayList;
 
 /**
+ * Form which handles almost all of the GUI components of the game.
  * @author Justin
  * @since 5/20/2015 5:02 PM
  */
@@ -51,6 +53,9 @@ public class CoffeeGameForm {
 		initializeForm(); // put objects on form and set everything up
 	}
 
+	/**
+	 * Initializes the form and loads all components of it.
+	 */
 	private void initializeForm() {
 		window = new JFrame("Coffee Clicker");
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -130,6 +135,10 @@ public class CoffeeGameForm {
 		window.add(northPanel, BorderLayout.NORTH);
 	}
 
+	/**
+	 * This method redraws the buildings panel (the prices and counts). This
+	 * is so we can reset the counts to what they were when we load a save file.
+	 */
 	private void initializeBuildingsPanel() {
 		if (buildingUpdater != null) {
 			buildingUpdater.interrupt(); // stop auto updating
@@ -185,10 +194,10 @@ public class CoffeeGameForm {
 	}
 	
 	/**
-	* Saves the game. Optionally can show a warning.
-	* @param ifShowWarning Only save if 'Yes' is clicked on the warning dialog.
-	* @return If we should continue loading/exiting.
-	*/
+	 * Saves the game. Optionally can show a warning.
+	 * @param ifShowWarning Only save if 'Yes' is clicked on the warning dialog.
+	 * @return If we should continue loading/exiting.
+	 */
 	public boolean save(boolean ifShowWarning) {
 		if (ifShowWarning) {
 			int result = showUnsavedProgressWarning();
@@ -203,7 +212,7 @@ public class CoffeeGameForm {
 		if (f.showSaveDialog(window) == JFileChooser.APPROVE_OPTION) {
 			try {
 				game.save(f.getSelectedFile().toPath());
-			} catch (java.io.IOException e) {
+			} catch (IOException e) {
 				return false;
 			}
 		} else {
@@ -211,7 +220,13 @@ public class CoffeeGameForm {
 		}
 		return true;
 	}
-	
+
+	/**
+	 * Loads a game from file if the user wants to discard unsaved data. This
+	 * method will show an error dialog box if loading fails for some reason
+	 * other than user cancellation.
+	 * @return Whether loading of a save file occurred successfully.
+	 */
 	public boolean load() {
 		JFileChooser f = new JFileChooser();
 		if (f.showOpenDialog(window) == JFileChooser.APPROVE_OPTION) {
@@ -220,9 +235,9 @@ public class CoffeeGameForm {
 				initializeTopPanel();
 				initializeBuildingsPanel();
 				return true;
-			} catch (java.io.IOException e) {
-				return false;
-			} catch (BufferUnderflowException | IllegalStateException e) {
+			} catch (BufferUnderflowException |
+					IllegalStateException |
+					IOException e) {
 				JOptionPane.showMessageDialog(window, LOAD_ERROR, "Error",
 						JOptionPane.ERROR_MESSAGE);
 			}
@@ -230,10 +245,19 @@ public class CoffeeGameForm {
 		return false;
 	}
 
+	/**
+	 * Shows the form.
+	 */
 	public void show() {
 		window.setVisible(true);
 	}
 
+	/**
+	 * Shows the warning dialog about unsaved progress.
+	 * @return An integer depending on which option was selected. Options
+	 * will be either {@link JOptionPane#YES_OPTION},
+	 * {@link JOptionPane#NO_OPTION} or {@link JOptionPane#CANCEL_OPTION}.
+	 */
 	public int showUnsavedProgressWarning() {
 		int option = JOptionPane.showConfirmDialog(window, UNSAVED_WARNING,
 					"Coffee Clicker", JOptionPane.YES_NO_CANCEL_OPTION,
@@ -245,6 +269,9 @@ public class CoffeeGameForm {
 		return option;
 	}
 
+	/**
+	 * Closes the form and stops any threads.
+	 */
 	public void close() {
 		window.setVisible(false);
 		textUpdater.interrupt();
