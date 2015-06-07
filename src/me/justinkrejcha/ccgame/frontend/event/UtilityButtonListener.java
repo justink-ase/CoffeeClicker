@@ -29,6 +29,10 @@ public class UtilityButtonListener implements ActionListener {
 		this.eventType = eventType;
 	}
 
+	/**
+	 * Performs actions based on the action selected.
+	 * @param e Action event. Unused.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (eventType) {
@@ -42,6 +46,9 @@ public class UtilityButtonListener implements ActionListener {
 			case SAVE:
 				form.save(false);
 				break;
+			default:
+				throw new IllegalStateException("Unexpected EventType: " +
+						eventType);
 		}
 	}
 }

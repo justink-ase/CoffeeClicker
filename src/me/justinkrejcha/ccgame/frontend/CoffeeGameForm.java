@@ -1,5 +1,6 @@
 package me.justinkrejcha.ccgame.frontend;
 
+import me.justinkrejcha.Util;
 import me.justinkrejcha.ccgame.*;
 import me.justinkrejcha.ccgame.frontend.event.*;
 
@@ -10,7 +11,7 @@ import java.nio.BufferUnderflowException;
 import java.util.ArrayList;
 
 /**
- * Form which handles almost all of the GUI components of the game.
+ * Form which handles most of the GUI components of the game.
  * @author Justin
  * @since 5/20/2015 5:02 PM
  */
@@ -33,23 +34,24 @@ public class CoffeeGameForm {
 	private JFrame window;
 	private JPanel northPanel;
 	private JPanel eastPanel;
-	private JPanel centerPanel;
-	private JPanel bottomPanel;
-	
-	private JLabel nameLabel;
-	private JLabel countLabel;
-	private JLabel cpsLabel;
-	private JLabel coffeeImgLabel;
-
-	private JButton infoButton;
-	private JButton saveButton;
-	private JButton loadButton;
-
-	private java.util.List<JButton> purchaseButtons;
-	private java.util.List<JLabel> buildingLabels;
 
 	public CoffeeGameForm(CoffeeGame game) {
+		window = new JFrame("Coffee Clicker");
+		window.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		window.setResizable(false);
+		window.setSize(new Dimension(500, 470));
+		window.setLocation(Util.getCenterScreen(window));
+		window.setLayout(new BorderLayout());
+
 		this.game = game;
+		if (this.game == null) {
+			this.game = new CoffeeGame(new CoffeePlayer());
+			if (!load()) {
+				throw new RuntimeException("User cancelled loading.");
+				//This is probably a bad idea, but the alternative would be to
+				//restructure how all the loading is done, and this works.
+			}
+		}
 		initializeForm(); // put objects on form and set everything up
 	}
 
@@ -57,37 +59,30 @@ public class CoffeeGameForm {
 	 * Initializes the form and loads all components of it.
 	 */
 	private void initializeForm() {
-		window = new JFrame("Coffee Clicker");
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.setResizable(false);
-		window.setSize(new Dimension(500, 470));
-		window.setLocation(new Point(400, 200));
-		window.setLayout(new BorderLayout());
-
 		initializeBuildingsPanel();
 
-		coffeeImgLabel = new JLabel();
+		JLabel coffeeImgLabel = new JLabel();
 		coffeeImgLabel.setIcon(new ImageIcon(IMAGE_PATH));
 		coffeeImgLabel.addMouseListener(
 				new CoffeeClickListener(game));
 
 
-		infoButton = new JButton("Info");
+		JButton infoButton = new JButton("Info");
 		infoButton.addActionListener(new UtilityButtonListener(game, this,
 				EventType.INFO));
 
-		loadButton = new JButton("Load");
+		JButton loadButton = new JButton("Load");
 		loadButton.addActionListener(new UtilityButtonListener(game, this,
 				EventType.LOAD));
 
-		saveButton = new JButton("Save");
+		JButton saveButton = new JButton("Save");
 		saveButton.addActionListener(new UtilityButtonListener(game, this,
 				EventType.SAVE));
 
-		centerPanel = new JPanel();
+		JPanel centerPanel = new JPanel();
 		centerPanel.add(coffeeImgLabel);
 
-		bottomPanel = new JPanel(new GridLayout(1, 3));
+		JPanel bottomPanel = new JPanel(new GridLayout(1, 3));
 		bottomPanel.add(infoButton);
 		bottomPanel.add(loadButton);
 		bottomPanel.add(saveButton);
@@ -113,13 +108,13 @@ public class CoffeeGameForm {
 
 		northPanel = new JPanel(new GridLayout(3, 0));
 
-		nameLabel = new JLabel(game.getPlayer().getName() + "'s Coffee Shop");
+		JLabel nameLabel = new JLabel(game.getPlayer().getName() + "'s Coffee Shop");
 		nameLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 16));
 
-		countLabel = new JLabel(LOADING_TEXT);
+		JLabel countLabel = new JLabel(LOADING_TEXT);
 		countLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 24));
 
-		cpsLabel = new JLabel(LOADING_TEXT);
+		JLabel cpsLabel = new JLabel(LOADING_TEXT);
 		cpsLabel.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 16));
 
 		if (game.getPlayer().getName() != null) {
@@ -147,8 +142,8 @@ public class CoffeeGameForm {
 			window.remove(eastPanel);
 		}
 
-		purchaseButtons = new ArrayList<JButton>();
-		buildingLabels = new ArrayList<JLabel>();
+		java.util.List<JButton> purchaseButtons = new ArrayList<JButton>();
+		java.util.List<JLabel> buildingLabels = new ArrayList<JLabel>();
 		
 		CoffeePlayer player = game.getPlayer();
 		BuildingList buildings = player.getBuildingList();
@@ -238,6 +233,7 @@ public class CoffeeGameForm {
 			} catch (BufferUnderflowException |
 					IllegalStateException |
 					IOException e) {
+				e.printStackTrace();
 				JOptionPane.showMessageDialog(window, LOAD_ERROR, "Error",
 						JOptionPane.ERROR_MESSAGE);
 			}
@@ -273,6 +269,7 @@ public class CoffeeGameForm {
 	 * Closes the form and stops any threads.
 	 */
 	public void close() {
+		if (!save(true)) return;
 		window.setVisible(false);
 		textUpdater.interrupt();
 		buildingUpdater.interrupt();

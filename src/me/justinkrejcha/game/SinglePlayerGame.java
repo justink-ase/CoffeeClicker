@@ -4,6 +4,7 @@ package me.justinkrejcha.game;
  * Represents a game that is played by one player.
  */
 public abstract class SinglePlayerGame {
+	private int fps;
 	private boolean gameRunning;
 	private Player player;
 	
@@ -17,11 +18,28 @@ public abstract class SinglePlayerGame {
 	/**
 	 * Sets the player used for this game. This should only be called by a
 	 * constructor or method to reset the game.
+	 * @param player Player
 	 */
 	protected void setPlayer(Player player) {
 		this.player = player;
 	}
-	
+
+	/**
+	 * Gets the frames per second.
+	 * @return Frames per second of the game.
+	 */
+	public int getFps() {
+		return fps;
+	}
+
+	/**
+	 * Sets the frames per second of the game.
+	 * @param fps Frames per second
+	 */
+	public void setFps(int fps) {
+		this.fps = fps;
+	}
+
 	/**
 	 * Gets if the game is running.
 	 */

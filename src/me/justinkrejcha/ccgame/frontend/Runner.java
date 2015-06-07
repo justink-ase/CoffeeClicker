@@ -1,7 +1,5 @@
 package me.justinkrejcha.ccgame.frontend;
 
-import me.justinkrejcha.ccgame.*;
-
 
 import javax.swing.*; // graphics! excitement!
 import java.io.File;
@@ -20,43 +18,7 @@ public class Runner {
 					"Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		int selected = JOptionPane.showConfirmDialog(null, 
-						"Would you like to load a save?", "Coffee Clicker",
-						JOptionPane.YES_NO_OPTION);
-							
-		boolean loadSave = selected == JOptionPane.YES_OPTION;
-							
-		String name = null;
-		if (!loadSave) {
-			name = getName();
-		}
-		CoffeeGame game = new CoffeeGame(new CoffeePlayer(name));
-		CoffeeGameForm form = new CoffeeGameForm(game);
-		game.start();
-		if (loadSave) {
-			if (!form.load()) {
-				form.close();
-				System.exit(0); // exit here
-			}
-		}
-		form.show();
-	}
-	
-	/**
-	 * Shows a dialog box asking the user to enter their name.
-	 * @return Name stripped of leading and trailing whitespace or null if blank
-	 * or the cancel button was selected.
-	 */
-	private static String getName() {
-		String name = "";
-		name = JOptionPane.showInputDialog(null, "Please enter your name " +
-						"(blank for no name):",
-						"Coffee Clicker", JOptionPane.DEFAULT_OPTION);
-		if (name != null) {
-			name = name.trim();
-			if (name.equals("")) name = null;
-		}
-		return name;
+		new MainMenuForm();
 	}
 
 	/**
@@ -86,8 +48,9 @@ public class Runner {
 			    ClassNotFoundException |
 			    InstantiationException |
 			    IllegalAccessException e) {
-
+			//Use the default L&F if there is a problem with it. There should
+			// be no cases where this happens, but catching these exceptions
+			// is required.
    		}
-		// Use the default if it somehow fails (which it shouldn't)...
 	}
 }

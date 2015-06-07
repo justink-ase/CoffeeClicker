@@ -1,5 +1,7 @@
 package me.justinkrejcha;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -138,5 +140,18 @@ public class Util {
 			newStr = newStr.replace("{" + i + "}", args[i]);
 		}
 		return newStr;
+	}
+
+	/**
+	 * Gets the point that corresponds to the center of the screen. This code
+	 * was slightly adapted from http://stackoverflow.com/a/144950/2805120
+	 * @param window Frame to get the center screen for
+	 * @return Point of center screen
+	 */
+	public static Point getCenterScreen(JFrame window) {
+		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+		int x = (int) ((dimension.getWidth() - window.getWidth()) / 2);
+		int y = (int) ((dimension.getHeight() - window.getHeight()) / 2);
+		return new Point(x, y);
 	}
 }

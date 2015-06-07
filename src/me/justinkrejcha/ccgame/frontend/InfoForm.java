@@ -1,5 +1,6 @@
 package me.justinkrejcha.ccgame.frontend;
 
+import me.justinkrejcha.Util;
 import me.justinkrejcha.ccgame.Building;
 import me.justinkrejcha.ccgame.CoffeePlayer;
 
@@ -20,6 +21,10 @@ public class InfoForm {
 	private JLabel header;
 	private JLabel mainText;
 
+	/**
+	 * Creates a new info form based on an information form.
+	 * @param player Player to use on the form.
+	 */
 	public InfoForm(CoffeePlayer player) {
 		this.player = player;
 
@@ -29,7 +34,7 @@ public class InfoForm {
 		window.setLayout(new BorderLayout());
 		window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		window.setSize(new Dimension(300, 200));
-		window.setLocation(new Point(400, 200));
+		window.setLocation(Util.getCenterScreen(window));
 		window.setResizable(false);
 
 		String headerLabel = STATS_HEADER;
@@ -43,7 +48,8 @@ public class InfoForm {
 				"<br>- All Time: " + f.format(player.getTotalCoffees()) +
 				"<br>- Per Second: " + f.format(player.getPerSecond()) +
 				"<br>- Spent: " + calculateSpent() +
-				"<br><br>Buildings: " + getCount();
+				"<br><br>Buildings: " +
+					player.getBuildingList().getTotalOwned();
 
 		if (player.hasCheated()) {
 			main += "<br><br>Cheated: Yes";
@@ -61,24 +67,18 @@ public class InfoForm {
 		window.pack();
 	}
 
+	/**
+	 * Shows the form.
+	 */
 	public void show() {
 		window.setVisible(true);
 	}
 
-	private int getCount() {
-		int count = 0;
-		for (Building b : player.getBuildingList().getAllBuildings()) {
-			count += b.getAmount();
-		}
-		return count;
-	}
-
+	/**
+	 * Calculates how much this player spent.
+	 * @return Spent amount.
+	 */
 	private long calculateSpent() {
-		long spent = 0;
-		for (Building building : player.getBuildingList().getAllBuildings()) {
-			spent += Math.ceil(building.getBasePrice() *
-					(Math.pow(1.15, building.getAmount()) - 1) / 0.15);
-		}
-		return spent;
+		return (long)Math.ceil(player.getTotalCoffees() - player.getCoffees());
 	}
 }

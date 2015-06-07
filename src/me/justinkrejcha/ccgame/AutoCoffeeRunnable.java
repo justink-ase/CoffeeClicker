@@ -3,6 +3,8 @@ package me.justinkrejcha.ccgame;
 /**
  * Creates a runnable which updates the coffees per second asynchronously to
  * the rest of the game, making it much less slower.
+ * @author Justin
+ * @see java.lang.Runnable
  */
 public class AutoCoffeeRunnable implements Runnable {
 	private CoffeeGame game;
@@ -19,6 +21,7 @@ public class AutoCoffeeRunnable implements Runnable {
 	
 	/**
 	 * The method that the CpS task executes when it's started.
+	 * @see Runnable#run()
 	 */
 	public void run() {
 		while (!Thread.interrupted()) {

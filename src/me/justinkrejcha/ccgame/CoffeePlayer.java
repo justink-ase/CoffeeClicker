@@ -19,6 +19,7 @@ public class CoffeePlayer extends Player {
 	private boolean funRuined;
 	private double coffees;
 	private double totalCoffees;
+	private int perClick;
 	private double perSecond;
 	private BuildingList buildings;
 	
@@ -44,6 +45,7 @@ public class CoffeePlayer extends Player {
 		this.totalCoffees = totalCoffees;
 		this.perSecond = perSecond;
 		this.buildings = buildings;
+		recalculateCpC();
 		doCheatCheck();
 	}
 	
@@ -91,7 +93,12 @@ public class CoffeePlayer extends Player {
 	 */
 	public void recalculateCpS() {
 		perSecond = buildings.getTotalBonus();
+		recalculateCpC();
 		doCheatCheck();
+	}
+
+	public void recalculateCpC() {
+		perClick = Math.max(1, this.buildings.getTotalOwned() / 5 * 2);
 	}
 
 	/**
@@ -106,10 +113,10 @@ public class CoffeePlayer extends Player {
 
 	/**
 	 * Adds 1 to the coffees. Equivalent to {@link #add(double)} with an
-	 * amount of 1.0.
+	 * amount of the buildings owned divided by 5.
 	 */
 	public void increment() {
-		add(1.0);
+		add(perClick);
 	}
 
 	/**
