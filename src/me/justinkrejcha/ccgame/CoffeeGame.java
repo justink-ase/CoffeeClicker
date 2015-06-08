@@ -10,14 +10,29 @@ import me.justinkrejcha.game.*;
  * Represents a game of Coffee Clicker.
  * @author Justin
  * @see me.justinkrejcha.game.SinglePlayerGame
+ * @see CoffeePlayer
  */
 public class CoffeeGame extends SinglePlayerGame {
 	private Thread autoClickerThread;
-	
-	public static String BUTTON_TEXT = "Buy 1 {0} ({1} coffees)";
 
-	public static byte END_MARKER = 0x03;
-	public static byte SEPARATOR = 0x1D;
+	/**
+	 * Text that is on the buttons to purchase a building.
+	 * @see me.justinkrejcha.ccgame.frontend.CoffeeGameForm
+	 */
+	public static final String BUTTON_TEXT = "Buy 1 {0} ({1} coffees)";
+
+	/**
+	 * The byte that marks the end of the data.
+	 * @see CoffeePlayer#load(Path)
+	 * @see CoffeePlayer#save(Path)
+	 */
+	public static final byte END_MARKER = 0x03;
+	/**
+	 * The byte that separates sections of the save file from one another.
+	 * @see CoffeePlayer#load(Path)
+	 * @see CoffeePlayer#save(Path)
+	 */
+	public static final byte SEPARATOR = 0x1D;
 
 	/**
 	 * Constructor for a new game with no name and empty stats. Usually only

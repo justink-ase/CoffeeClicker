@@ -1,7 +1,6 @@
 package me.justinkrejcha.ccgame.frontend;
 
 import me.justinkrejcha.Util;
-import me.justinkrejcha.ccgame.Building;
 import me.justinkrejcha.ccgame.CoffeePlayer;
 
 import javax.swing.*;
@@ -18,8 +17,6 @@ public class InfoForm {
 
 	private CoffeePlayer player;
 	private JFrame window;
-	private JLabel header;
-	private JLabel mainText;
 
 	/**
 	 * Creates a new info form based on an information form.
@@ -41,7 +38,7 @@ public class InfoForm {
 		if (player.getName() != null) {
 			headerLabel = headerLabel + " for " + player.getName();
 		}
-		header = new JLabel(headerLabel);
+		JLabel header = new JLabel(headerLabel);
 		header.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
 
 		String main = "<html>Coffees: " + f.format(player.getCoffees()) +
@@ -58,7 +55,7 @@ public class InfoForm {
 			}
 		}
 
-		mainText = new JLabel();
+		JLabel mainText = new JLabel();
 		mainText.setText(main + "</html>");
 		mainText.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 16));
 

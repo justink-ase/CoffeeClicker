@@ -20,16 +20,16 @@ public class CoffeeGameForm {
 	private Thread textUpdater;
 	private Thread buildingUpdater;
 
-	private static String LOADING_TEXT = "Loading...";
-	private static String RES_DIRECTORY = System.getProperty("user.dir") +
+	public static final String LOADING_TEXT = "Loading...";
+	public static final String RES_DIRECTORY = System.getProperty("user.dir") +
 			"\\resources\\";
-	private static String IMAGE_PATH = RES_DIRECTORY + "coffee.png";
+	public static final String IMAGE_PATH = RES_DIRECTORY + "coffee.png";
 
-	private static String UNSAVED_WARNING = "Some progress has not been saved" +
-			". Would you like to save your progress now?";
+	public static final String UNSAVED_WARNING = "Some progress has not been" +
+			" saved. Would you like to save your progress now?";
 
-	private static String LOAD_ERROR = "An error occurred while loading your " +
-			"save file. Please try again with another save file.";
+	public static final String LOAD_ERROR = "An error occurred while loading" +
+			" your save file. Please try again with another save file.";
 
 	private JFrame window;
 	private JPanel northPanel;
@@ -142,8 +142,8 @@ public class CoffeeGameForm {
 			window.remove(eastPanel);
 		}
 
-		java.util.List<JButton> purchaseButtons = new ArrayList<JButton>();
-		java.util.List<JLabel> buildingLabels = new ArrayList<JLabel>();
+		java.util.List<JButton> purchaseButtons = new ArrayList<>();
+		java.util.List<JLabel> buildingLabels = new ArrayList<>();
 		
 		CoffeePlayer player = game.getPlayer();
 		BuildingList buildings = player.getBuildingList();

@@ -1,7 +1,7 @@
 package me.justinkrejcha.ccgame;
 
 import me.justinkrejcha.Util;
-import me.justinkrejcha.game.*;
+import me.justinkrejcha.game.Player;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -12,6 +12,8 @@ import java.nio.file.Path;
 /**
  * The player class for the game. This class contains all buildings, and data
  * used during game-play.
+ * @see CoffeeGame
+ * @see me.justinkrejcha.game.Player
  */
 public class CoffeePlayer extends Player {
 	private String name;
@@ -22,16 +24,37 @@ public class CoffeePlayer extends Player {
 	private int perClick;
 	private double perSecond;
 	private BuildingList buildings;
-	
+
+	/**
+	 * Initializes a new player with no name. Equivalent to a call to
+	 * {@link #CoffeePlayer(String)} with a null argument. Only really used
+	 * for testing purposes.
+	 */
 	public CoffeePlayer() {
 		this(null);
 	}
-	
+
+	/**
+	 * Creates a new player from just a name.
+	 * @param name Name to use
+	 */
 	public CoffeePlayer(String name) {
 		this(name, false, false, 0.0, 0.0, 0.0,
 				CoffeeGame.createDefaultBuildings());
 	}
-	
+
+	/**
+	 * Initializes a new player with all stats et.
+	 *
+	 * @param name         Name to use
+	 * @param cheated      Flag indicating whether this user has cheated. A cheat
+	 *                     check is also done after all flags are set.
+	 * @param funRuined    Whether the fun ruined flag has been set.
+	 * @param coffees      Coffees this player has.
+	 * @param totalCoffees Total coffees brewed all time.
+	 * @param perSecond    Coffees per second.
+	 * @param buildings    Buildings
+	 */
 	public CoffeePlayer(String name, boolean cheated, boolean funRuined,
 	                    double coffees, double totalCoffees, double perSecond,
 						BuildingList buildings) {
@@ -48,29 +71,47 @@ public class CoffeePlayer extends Player {
 		recalculateCpC();
 		doCheatCheck();
 	}
-	
+
+	/**
+	 * Gets the amount of coffees.
+	 * @return Coffees this player has.
+	 */
 	public double getCoffees() {
 		return coffees;
 	}
-	
+
+	/**
+	 * Gets the amount of coffees this player has brewed all time. The
+	 * amount spent can be gotten by subtracting the value of
+	 * {@link #getCoffees()} from this value.
+	 * @return Total coffees brewed all time.
+	 */
 	public double getTotalCoffees() {
 		return totalCoffees;
 	}
-	
+
+	/**
+	 * Gets the amount of coffees per second.
+	 * @return Coffees per second
+	 */
 	public double getPerSecond() {
 		return perSecond;
 	}
 	
 	/**
-	* Checks if cheated, and then returns that value. This should be called even
-	* within the class instead of directly accessing the boolean variable.
-	* @return If this game has been cheated on.
-	*/
+	 * Checks if cheated, and then returns that value. This should be called
+	 * even within the class instead of directly accessing the boolean variable.
+	 * @return If this game has been cheated on.
+	 */
 	public boolean hasCheated() {
 		doCheatCheck();
 		return cheated;
 	}
 
+	/**
+	 * If the fun ruined flag has been set.
+	 * @return Whether the flag ruined flag has been set.
+	 */
 	public boolean isFunRuined() {
 		return funRuined;
 	}
@@ -78,18 +119,27 @@ public class CoffeePlayer extends Player {
 	public String getName() {
 		return name;
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
 	protected void setName(String name) {
 		this.name = name;
 	}
-	
+
+	/**
+	 * Gets the list of buildings, which has all of the buildings this player
+	 * has.
+	 * @return Buildings
+	 */
 	public BuildingList getBuildingList() {
 		return buildings;
 	}
 
 	/**
 	 * Recalculates the total amount of coffees per second based on the
-	 * amount of buildings the user has. Also performs a cheat check.
+	 * amount of buildings the user has as well as the amount of coffees
+	 * gained per click. Also performs a cheat check.
 	 */
 	public void recalculateCpS() {
 		perSecond = buildings.getTotalBonus();
@@ -97,6 +147,10 @@ public class CoffeePlayer extends Player {
 		doCheatCheck();
 	}
 
+	/**
+	 * Recalculates the total amount of coffees per click. This is based on
+	 * the formula of <em>total buildings / 5</em>.
+	 */
 	public void recalculateCpC() {
 		perClick = Math.max(1, this.buildings.getTotalOwned() / 5 * 2);
 	}

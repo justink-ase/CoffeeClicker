@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A utility class. Initalization isn't allowed.
+ * A utility class. Initialization isn't allowed.
  */
-public class Util {
+public final class Util {
 	private Util() {
-		// stops normal initalization
+		// stops normal initialization
 	}
 	
 	/**
@@ -42,20 +42,20 @@ public class Util {
 	}
 
 	/**
-	 * Splits an array into a list of byte arrays
+	 * Splits an array into a 2D array
 	 * @param array     Array to split
 	 * @param separator Separator byte to use
-	 * @return List of arrays containing the split data.
+	 * @return 2D array containing the split data.
 	 */
 	public static byte[][] splitByteArray(byte[] array, byte separator) {
-		List<Byte[]> bytes = new ArrayList<Byte[]>();
-		List<Byte> subBytes = new ArrayList<Byte>();
+		List<Byte[]> bytes = new ArrayList<>();
+		List<Byte> subBytes = new ArrayList<>();
 		for (int i = 0; i < array.length; i++) {
 			if (array[i] != separator) {
 				subBytes.add(array[i]);
 			} else {
-				bytes.add(subBytes.toArray(new Byte[0]));
-				subBytes = new ArrayList<Byte>();
+				bytes.add(subBytes.toArray(new Byte[subBytes.size()]));
+				subBytes = new ArrayList<>();
 			}
 		}
 		byte[][] converted = new byte[bytes.size()][];

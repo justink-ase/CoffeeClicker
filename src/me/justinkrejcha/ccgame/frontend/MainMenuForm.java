@@ -92,7 +92,7 @@ public class MainMenuForm {
 		String name = "";
 		name = JOptionPane.showInputDialog(null, "Please enter your name " +
 						"(blank for no name):",
-				"Coffee Clicker", JOptionPane.DEFAULT_OPTION);
+				"Coffee Clicker", JOptionPane.PLAIN_MESSAGE);
 		if (name != null) {
 			name = name.trim();
 			if (name.equals("")) name = null;

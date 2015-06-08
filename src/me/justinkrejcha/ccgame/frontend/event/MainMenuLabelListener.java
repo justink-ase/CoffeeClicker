@@ -32,17 +32,12 @@ public class MainMenuLabelListener implements MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		switch (eventType) {
 			case LOAD:
-				try {
-					new CoffeeGameForm(null).show();
-				} catch (RuntimeException ex) {
-					return; // don't close form if this throws an exception
-				}
 				break;
 			case START:
 				String name = MainMenuForm.getName();
-				CoffeeGame g = new CoffeeGame(new CoffeePlayer(name));
-				g.start();
-				new CoffeeGameForm(g).show();
+				CoffeeGame game = new CoffeeGame(new CoffeePlayer(name));
+				game.start();
+				new CoffeeGameForm(game).show();
 				break;
 			case QUIT:
 				System.exit(0);
